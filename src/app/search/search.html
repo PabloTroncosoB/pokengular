@@ -1,1 +1,11 @@
-<p>search works!</p>
+<div class="searchBox">
+  <div>
+    <p>
+      Create your new pokemon, you can come up with a name like Venolett combining venosaur and
+      digglet and a new atrocity will be generated just for you, every time will generate a new
+      ungodly creature.
+    </p>
+    <input #search type="text" placeholder="piktrio, bulbtorb, vulpchu, etc..." />
+    <button (click)="getPokiman(search.value)">Go!</button>
+  </div>
+</div>
