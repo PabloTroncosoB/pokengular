@@ -1054,4 +1054,8 @@ export class App {
 
     return [];
   }
+  getFision(txt: string): void {
+    const arr = this.buscarFisionPokemonPerfecto(txt);
+    alert(arr[0] + ' y ' + arr[1]);
+  }
 }

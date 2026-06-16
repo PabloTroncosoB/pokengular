@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 
 @Component({
   selector: 'app-search',
@@ -7,7 +7,8 @@ import { Component } from '@angular/core';
   styleUrl: './search.css',
 })
 export class Search {
-  getPokiman(txt: string): void {
-    alert(txt);
+  @Output() getFision = new EventEmitter<any>();
+  getPokiman(): void {
+    this.getPokiman.emit(this.txt);
   }
 }
