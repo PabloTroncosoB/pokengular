@@ -1,14 +1,18 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Output, ViewChild, ElementRef } from '@angular/core';
 
 @Component({
-  selector: 'app-search',
+  selector: 'search',
   imports: [],
   templateUrl: './search.html',
   styleUrl: './search.css',
 })
 export class Search {
-  @Output() getFision = new EventEmitter<any>();
+  @Output() getFision = new EventEmitter<string>();
+  
+  @ViewChild('search', { static: true }) searchInput!: ElementRef<HTMLInputElement>;
+  
   getPokiman(): void {
-    this.getPokiman.emit(this.txt);
+    const searchText = this.searchInput.nativeElement.value;
+    this.getFision.emit(searchText);
   }
 }
