@@ -1,5 +1,119 @@
-.searchBox {
+.search-box {
+  max-width: 540px;
+  margin: 1.5rem auto;
+  padding: 0 1rem;
   display: flex;
-  width: auto;
-  justify-content: center;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.search-prompt {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.4;
+  color: #444;
+  text-align: center;
+}
+
+.search-row {
+  display: flex;
+  gap: 0.5rem;
+  align-items: stretch;
+}
+
+.search-row input {
+  flex: 1;
+  min-width: 0;
+  padding: 0.7rem 1rem;
+  font-size: 1rem;
+  font-family: inherit;
+  color: #222;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 0.5rem;
+  transition:
+    border-color 150ms ease,
+    box-shadow 150ms ease;
+}
+
+.search-row input::placeholder {
+  color: #999;
+}
+
+.search-row input:focus-visible {
+  outline: none;
+  border-color: #1565c0;
+  box-shadow: 0 0 0 3px rgba(21, 101, 192, 0.25);
+}
+
+.go-btn {
+  padding: 0.7rem 1.4rem;
+  font-size: 1rem;
+  font-weight: 600;
+  font-family: inherit;
+  color: #fff;
+  background: #1565c0;
+  border: 1px solid #1565c0;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition:
+    background 150ms ease,
+    border-color 150ms ease;
+}
+
+.go-btn:hover,
+.go-btn:focus-visible {
+  background: #0d47a1;
+  border-color: #0d47a1;
+}
+
+.go-btn:focus-visible {
+  outline: 2px solid #1565c0;
+  outline-offset: 2px;
+}
+
+.search-hint {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #666;
+  text-align: center;
+}
+
+.chip {
+  display: inline-block;
+  padding: 0.2rem 0.7rem;
+  margin: 0 0.15rem;
+  font-family: 'Courier New', monospace;
+  font-size: 0.85rem;
+  color: #1565c0;
+  background: transparent;
+  border: 1px solid #1565c0;
+  border-radius: 999px;
+  cursor: pointer;
+  transition:
+    background 150ms ease,
+    color 150ms ease;
+}
+
+.chip:hover,
+.chip:focus-visible {
+  background: #1565c0;
+  color: #fff;
+}
+
+.chip:focus-visible {
+  outline: 2px solid #1565c0;
+  outline-offset: 2px;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }

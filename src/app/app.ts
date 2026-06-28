@@ -1,5 +1,62 @@
-import { Component, signal } from '@angular/core';
+import { Component, ElementRef, inject, signal, viewChild } from '@angular/core';
 import { Search } from './search/search';
+import { PollinationsAuthService } from './services/pollinations-auth.service';
+
+// Pollinations image generation endpoint.
+// Opcional: clave de respaldo para usuarios en modo anónimo (pk_ o sk_).
+// Nunca expongas una clave `sk_` en código de cliente.
+const POLLINATIONS_FALLBACK_API_KEY = '';
+const POLLINATIONS_IMAGE_BASE = 'https://gen.pollinations.ai/image';
+const POLLINATIONS_MODEL = 'flux';
+
+type FusionResult = {
+  pokemons: string[];
+  prompt: string;
+  imageUrl: string;
+};
+
+type ImageStatus = 'idle' | 'loading' | 'loaded' | 'error';
+
+const QUALITIES = [
+  'horrendo',
+  'atroz',
+  'feliz',
+  'tierno',
+  'enfermo',
+  'retardados',
+  'poderoso',
+  'musculoso',
+] as const;
+
+type Quality = (typeof QUALITIES)[number];
+
+// Spanish labels shown in the UI…
+const QUALITY_LABELS: Record<Quality, string> = {
+  horrendo: 'Horrendo',
+  atroz: 'Atroz',
+  feliz: 'Feliz',
+  tierno: 'Tierno',
+  enfermo: 'Enfermo',
+  retardados: 'Retardados',
+  poderoso: 'Poderoso',
+  musculoso: 'Musculoso',
+};
+
+// …and short English descriptors baked into the image prompt.
+const QUALITY_DESCRIPTORS: Record<Quality, string> = {
+  horrendo: 'hideous and grotesque',
+  atroz: 'monstrous and terrifying',
+  feliz: 'happy and cheerful',
+  tierno: 'cute and adorable',
+  enfermo: 'sickly and unsettling',
+  retardados: 'derpy and silly-looking',
+  poderoso: 'powerful and imposing',
+  musculoso: 'muscular and buff',
+};
+
+function pickRandomQuality(): Quality {
+  return QUALITIES[Math.floor(Math.random() * QUALITIES.length)]!;
+}
 
 const pokelist = [
   'bulbasaur',
@@ -1036,7 +1093,22 @@ const pokelist = [
   styleUrl: './app.css',
 })
 export class App {
+  private readonly auth = inject(PollinationsAuthService);
+
   protected readonly title = signal('pokengular');
+
+  protected readonly fusion = signal<FusionResult | null>(null);
+  protected readonly imageStatus = signal<ImageStatus>('idle');
+  protected readonly isAuthenticated = this.auth.isAuthenticated;
+  protected readonly balance = this.auth.balance;
+  protected readonly balanceLoading = this.auth.balanceLoading;
+
+  constructor() {
+    // Capture the api_key returned by Pollinations after the OAuth
+    // redirect, and clean it from the URL.
+    this.auth.handleAuthRedirect();
+  }
+
   buscarFisionPokemonPerfecto(textoCombinado: string): string[] {
     const textoLimpio = textoCombinado.toLowerCase();
     for (let i = 3; i <= textoLimpio.length - 2; i++) {
@@ -1054,8 +1126,108 @@ export class App {
 
     return [];
   }
-  getFision(txt: string): void {
+
+  getFision(txt: string): string[] {
     const arr = this.buscarFisionPokemonPerfecto(txt);
-    alert(arr[0] + ' y ' + arr[1]);
+
+    if (arr[0]) {
+      const prompt = this.buildFusionPrompt(arr);
+      this.fusion.set({
+        pokemons: arr,
+        prompt,
+        imageUrl: this.buildImageUrl(prompt),
+      });
+      this.imageStatus.set('loading');
+    } else {
+      this.fusion.set(null);
+      this.imageStatus.set('idle');
+    }
+
+    return arr;
+  }
+
+  protected onImageLoad(): void {
+    this.imageStatus.set('loaded');
+    // Refresh the user's balance so the UI reflects the cost of this
+    // generation. Silently no-ops if the user is in anonymous mode.
+    void this.auth.refreshBalance();
+  }
+
+  protected onImageError(): void {
+    this.imageStatus.set('error');
+  }
+
+  protected refreshBalance(): void {
+    void this.auth.refreshBalance();
+  }
+
+  private readonly detailsDialog = viewChild<ElementRef<HTMLDialogElement>>('detailsDialog');
+
+  protected openDetails(): void {
+    this.detailsDialog()?.nativeElement.showModal();
+  }
+
+  protected closeDetails(): void {
+    this.detailsDialog()?.nativeElement.close();
+  }
+
+  protected onDialogClick(event: MouseEvent): void {
+    // Close when the user clicks the dialog itself (= the backdrop area),
+    // but not when they click inside the article content.
+    if (event.target === this.detailsDialog()?.nativeElement) {
+      this.closeDetails();
+    }
+  }
+
+  protected regenerate(): void {
+    const current = this.fusion();
+    if (!current) {
+      return;
+    }
+    this.fusion.set({
+      ...current,
+      imageUrl: this.buildImageUrl(current.prompt),
+    });
+    this.imageStatus.set('loading');
+  }
+
+  protected signInWithPollinations(): void {
+    this.auth.authorize();
+  }
+
+  protected signOut(): void {
+    this.auth.signOut();
+    this.fusion.set(null);
+    this.imageStatus.set('idle');
+  }
+
+  private buildImageUrl(prompt: string): string {
+    const seed = Math.floor(Math.random() * 1_000_000);
+    const params = new URLSearchParams({
+      model: POLLINATIONS_MODEL,
+      width: '512',
+      height: '512',
+      seed: String(seed),
+    });
+    const apiKey = this.auth.getApiKey() ?? POLLINATIONS_FALLBACK_API_KEY;
+    if (apiKey) {
+      params.set('key', apiKey);
+    }
+    return `${POLLINATIONS_IMAGE_BASE}/${encodeURIComponent(prompt)}?${params.toString()}`;
+  }
+
+  private buildFusionPrompt(pokemons: string[]): string {
+    const quality = pickRandomQuality();
+    const descriptor = QUALITY_DESCRIPTORS[quality];
+
+    const subject =
+      pokemons.length === 1
+        ? `official pokemon artwork of ${pokemons[0]}`
+        : `pokemon fusion hybrid of ${pokemons[0]} and ${pokemons[1]}`;
+
+    return (
+      `${subject}, ${descriptor}, unique creature design, ` +
+      `detailed digital art, official pokemon style, full body, white background`
+    );
   }
 }

@@ -1,0 +1,366 @@
+.auth-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem 1rem;
+  max-width: 640px;
+  margin: 1.5rem auto 0;
+  padding: 0.75rem 1rem;
+  font-size: 0.9rem;
+  color: #444;
+}
+
+.auth-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.auth-status--ok {
+  color: #1b5e20;
+}
+
+.auth-dot {
+  width: 0.6rem;
+  height: 0.6rem;
+  border-radius: 50%;
+  background: #2e7d32;
+  box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.2);
+}
+
+.auth-btn {
+  padding: 0.45rem 1rem;
+  font-size: 0.9rem;
+  border: 1px solid #555;
+  border-radius: 0.4rem;
+  background: #fff;
+  color: #333;
+  cursor: pointer;
+  transition:
+    background 150ms ease,
+    color 150ms ease,
+    border-color 150ms ease;
+}
+
+.auth-btn:hover,
+.auth-btn:focus-visible {
+  background: #333;
+  color: #fff;
+  border-color: #333;
+}
+
+.auth-btn:focus-visible {
+  outline: 2px solid #333;
+  outline-offset: 2px;
+}
+
+.auth-btn--primary {
+  background: #1b5e20;
+  color: #fff;
+  border-color: #1b5e20;
+}
+
+.auth-btn--primary:hover,
+.auth-btn--primary:focus-visible {
+  background: #2e7d32;
+  border-color: #2e7d32;
+}
+
+.balance {
+  color: #1b5e20;
+}
+
+.balance--loading {
+  color: #666;
+  font-style: italic;
+}
+
+.balance-refresh {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.6rem;
+  height: 1.6rem;
+  padding: 0;
+  font-size: 1rem;
+  line-height: 1;
+  border: 1px solid #1b5e20;
+  border-radius: 50%;
+  background: transparent;
+  color: #1b5e20;
+  cursor: pointer;
+  transition:
+    background 150ms ease,
+    color 150ms ease;
+}
+
+.balance-refresh:hover:not(:disabled),
+.balance-refresh:focus-visible:not(:disabled) {
+  background: #1b5e20;
+  color: #fff;
+}
+
+.balance-refresh:focus-visible {
+  outline: 2px solid #1b5e20;
+  outline-offset: 2px;
+}
+
+.balance-refresh:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  animation: spin 800ms linear infinite;
+}
+
+.external-note {
+  max-width: 640px;
+  margin: 1rem auto 0;
+  padding: 0 1rem;
+  font-size: 0.8rem;
+  line-height: 1.5;
+  color: #666;
+  text-align: center;
+}
+
+.external-note a {
+  color: #1565c0;
+  text-decoration: underline;
+}
+
+.external-note a:hover,
+.external-note a:focus-visible {
+  color: #0d47a1;
+}
+
+.external-note a:focus-visible {
+  outline: 2px solid #1565c0;
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.fusion-result {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  margin: 2rem auto;
+  max-width: 640px;
+  padding: 0 1rem;
+  text-align: center;
+}
+
+.fusion-result h2 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.fusion-names {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.fusion-actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+}
+
+.fusion-image-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 512px;
+  aspect-ratio: 1 / 1;
+  border-radius: 1rem;
+  overflow: hidden;
+  background: #f4f4f4;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.fusion-image-wrapper img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: opacity 200ms ease-in-out;
+}
+
+.fusion-image-wrapper img.is-hidden {
+  opacity: 0;
+}
+
+.fusion-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  background: rgba(244, 244, 244, 0.92);
+  color: #333;
+  font-size: 1rem;
+}
+
+.fusion-overlay--error {
+  color: #b00020;
+  background: rgba(244, 244, 244, 0.95);
+}
+
+.spinner {
+  width: 2rem;
+  height: 2rem;
+  border: 3px solid #ccc;
+  border-top-color: #333;
+  border-radius: 50%;
+  animation: spin 800ms linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.app-footer {
+  margin-top: 3rem;
+  padding: 1.5rem 1rem;
+  text-align: center;
+  font-size: 0.85rem;
+  color: #888;
+}
+
+.footer-link {
+  padding: 0;
+  font: inherit;
+  color: #1565c0;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.footer-link:hover,
+.footer-link:focus-visible {
+  color: #0d47a1;
+}
+
+.footer-link:focus-visible {
+  outline: 2px solid #1565c0;
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.details-dialog {
+  margin: auto;
+  padding: 0;
+  border: none;
+  border-radius: 0.75rem;
+  background: #fff;
+  color: #333;
+  max-width: 560px;
+  width: calc(100% - 2rem);
+  max-height: calc(100vh - 2rem);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+}
+
+.details-dialog::backdrop {
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(2px);
+}
+
+.details-content {
+  padding: 1.5rem 1.75rem;
+  max-height: calc(100vh - 4rem);
+  overflow-y: auto;
+}
+
+.details-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid #eee;
+}
+
+.details-header h3 {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+.details-content h4 {
+  margin: 1.25rem 0 0.5rem;
+  font-size: 1rem;
+}
+
+.details-content p,
+.details-content ul {
+  margin: 0.5rem 0;
+  line-height: 1.5;
+}
+
+.details-content code {
+  padding: 0.1rem 0.4rem;
+  font-family: 'Courier New', monospace;
+  font-size: 0.9em;
+  background: #f4f4f4;
+  border-radius: 0.25rem;
+}
+
+.details-content ul {
+  padding-left: 1.5rem;
+}
+
+.close-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  font-size: 1.5rem;
+  line-height: 1;
+  color: #666;
+  background: transparent;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  transition:
+    background 150ms ease,
+    color 150ms ease;
+}
+
+.close-btn:hover,
+.close-btn:focus-visible {
+  background: #f4f4f4;
+  color: #333;
+}
+
+.close-btn:focus-visible {
+  outline: 2px solid #1565c0;
+  outline-offset: 2px;
+}
+
+.regenerate-btn {
+  padding: 0.6rem 1.4rem;
+  font-size: 1rem;
+  border: 1px solid #333;
+  border-radius: 0.5rem;
+  background: #fff;
+  color: #333;
+  cursor: pointer;
+  transition:
+    background 150ms ease,
+    color 150ms ease;
+}
+
+.regenerate-btn:hover,
+.regenerate-btn:focus-visible {
+  background: #333;
+  color: #fff;
+}
+
+.regenerate-btn:focus-visible {
+  outline: 2px solid #333;
+  outline-offset: 2px;
+}

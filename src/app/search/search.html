@@ -1,11 +1,29 @@
-<div class="searchBox">
-  <div>
-    <p>
-      Create your new pokemon, you can come up with a name like Venolett combining venosaur and
-      digglet and a new atrocity will be generated just for you, every time will generate a new
-      ungodly creature.
-    </p>
-    <input #search type="text" placeholder="piktrio, bulbtorb, vulpchu, etc..." />
-    <button (click)="getPokiman()">Go!</button>
+<form class="search-box">
+  <p class="search-prompt">
+    Type a fusion of two pokemon names. Every <strong>Go!</strong> creates a new creature with a
+    random quality and a fresh seed.
+  </p>
+
+  <div class="search-row">
+    <label for="search-input" class="visually-hidden">Pokemon fusion name</label>
+    <input
+      id="search-input"
+      type="text"
+      [formControl]="searchControl"
+      placeholder="vulpchu, piktrio, charlax…"
+      autocomplete="off"
+      spellcheck="false"
+      autofocus
+      (keydown.enter)="onEnter($event)"
+    />
+    <button type="button" class="go-btn" (click)="onSubmit()">Go!</button>
   </div>
-</div>
+
+  <p class="search-hint">
+    Try:
+    <button type="button" class="chip" (click)="useExample('vulpchu')">vulpchu</button>
+    <button type="button" class="chip" (click)="useExample('piktrio')">piktrio</button>
+    <button type="button" class="chip" (click)="useExample('charlax')">charlax</button>
+    <button type="button" class="chip" (click)="useExample('pikablast')">pikablast</button>
+  </p>
+</form>
