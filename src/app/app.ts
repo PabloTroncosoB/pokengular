@@ -1,4 +1,4 @@
-import { Component, ElementRef, inject, signal, viewChild } from '@angular/core';
+import { Component, ElementRef, computed, inject, signal, viewChild } from '@angular/core';
 import { Search } from './search/search';
 import { PollinationsAuthService } from './services/pollinations-auth.service';
 
@@ -18,40 +18,27 @@ type FusionResult = {
 type ImageStatus = 'idle' | 'loading' | 'loaded' | 'error';
 
 const QUALITIES = [
-  'horrendo',
-  'atroz',
-  'feliz',
-  'tierno',
-  'enfermo',
-  'retardados',
-  'poderoso',
-  'musculoso',
+  'hideous',
+  'atrocious',
+  'happy',
+  'cute',
+  'sickly',
+  'derpy',
+  'powerful',
+  'muscular',
 ] as const;
 
 type Quality = (typeof QUALITIES)[number];
 
-// Spanish labels shown in the UI…
-const QUALITY_LABELS: Record<Quality, string> = {
-  horrendo: 'Horrendo',
-  atroz: 'Atroz',
-  feliz: 'Feliz',
-  tierno: 'Tierno',
-  enfermo: 'Enfermo',
-  retardados: 'Retardados',
-  poderoso: 'Poderoso',
-  musculoso: 'Musculoso',
-};
-
-// …and short English descriptors baked into the image prompt.
 const QUALITY_DESCRIPTORS: Record<Quality, string> = {
-  horrendo: 'hideous and grotesque',
-  atroz: 'monstrous and terrifying',
-  feliz: 'happy and cheerful',
-  tierno: 'cute and adorable',
-  enfermo: 'sickly and unsettling',
-  retardados: 'derpy and silly-looking',
-  poderoso: 'powerful and imposing',
-  musculoso: 'muscular and buff',
+  hideous: 'hideous and grotesque',
+  atrocious: 'monstrous and terrifying',
+  happy: 'happy and cheerful',
+  cute: 'cute and adorable',
+  sickly: 'sickly and unsettling',
+  derpy: 'derpy and silly-looking',
+  powerful: 'powerful and imposing',
+  muscular: 'muscular and buff',
 };
 
 function pickRandomQuality(): Quality {
@@ -1102,6 +1089,16 @@ export class App {
   protected readonly isAuthenticated = this.auth.isAuthenticated;
   protected readonly balance = this.auth.balance;
   protected readonly balanceLoading = this.auth.balanceLoading;
+  protected readonly notFound = signal<string | null>(null);
+
+  protected readonly errorMessage = computed(() => {
+    if (this.imageStatus() !== 'error') {
+      return null;
+    }
+    return this.isAuthenticated()
+      ? "Couldn't make the image. Hit Regenerate to try again."
+      : "Couldn't make the image. Sign in with Pollinations — the anonymous tier is rate-limited.";
+  });
 
   constructor() {
     // Capture the api_key returned by Pollinations after the OAuth
@@ -1131,6 +1128,7 @@ export class App {
     const arr = this.buscarFisionPokemonPerfecto(txt);
 
     if (arr[0]) {
+      this.notFound.set(null);
       const prompt = this.buildFusionPrompt(arr);
       this.fusion.set({
         pokemons: arr,
@@ -1139,6 +1137,7 @@ export class App {
       });
       this.imageStatus.set('loading');
     } else {
+      this.notFound.set(txt);
       this.fusion.set(null);
       this.imageStatus.set('idle');
     }

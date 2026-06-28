@@ -138,6 +138,19 @@
   border-radius: 2px;
 }
 
+.not-found {
+  max-width: 540px;
+  margin: 1rem auto 0;
+  padding: 0.75rem 1rem;
+  background: #fff8e1;
+  border: 1px solid #ffcc80;
+  border-radius: 0.5rem;
+  color: #5d4037;
+  font-size: 0.95rem;
+  line-height: 1.4;
+  text-align: center;
+}
+
 .fusion-result {
   display: flex;
   flex-direction: column;
@@ -204,6 +217,10 @@
 .fusion-overlay--error {
   color: #b00020;
   background: rgba(244, 244, 244, 0.95);
+}
+
+.fusion-overlay--error .auth-btn {
+  margin-top: 0.5rem;
 }
 
 .spinner {
