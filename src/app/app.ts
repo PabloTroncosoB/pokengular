@@ -1222,11 +1222,11 @@ export class App {
     const subject =
       pokemons.length === 1
         ? `official pokemon artwork of ${pokemons[0]}`
-        : `pokemon fusion hybrid of ${pokemons[0]} and ${pokemons[1]}`;
+        : `one pokemon creature hybrid of ${pokemons[0]} and ${pokemons[1]}`;
 
     return (
-      `${subject}, ${descriptor}, unique creature design, ` +
-      `detailed digital art, official pokemon style, full body, white background`
+      `${subject}, ${descriptor}, draw,` +
+      `official pokemon based on videogame style, full body.no artist signature`
     );
   }
 }
